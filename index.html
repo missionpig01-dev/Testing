@@ -40,19 +40,35 @@
         }
     </style>
     <script>
+        let isInitialContent = true;
+
         function changeContent() {
             const contentDiv = document.getElementById('gameContent');
-            contentDiv.innerHTML = `
-                <h1>Heading!</h1>
-                <h2>Title</h2>
-                <p>title</p>
-                <p>Content. Testing 1 2 3.</p>
-            `;
+            const button = document.getElementById('toggleButton');
+
+            if (isInitialContent) {
+                contentDiv.innerHTML = `
+                    <h1>Heading!</h1>
+                    <h2>Title</h2>
+                    <p>title</p>
+                    <p>Content.</p>
+                `;
+                button.innerText = '中';
+            } else {
+                contentDiv.innerHTML = `
+                    <h1>大標題！</h1>
+                    <h2>中標題</h2>
+                    <p>小標題</p>
+                    <p>內容文本，以上純粹用於測試格式</p>
+                `;
+                button.innerText = 'Eng';
+            }
+            isInitialContent = !isInitialContent;
         }
     </script>
 </head>
 <body>
-    <button onclick="changeContent()">Eng</button>
+    <button id="toggleButton" onclick="changeContent()">Eng</button>
     <div class="content" id="gameContent">
         <h1>大標題！</h1>
         <h2>中標題</h2>
