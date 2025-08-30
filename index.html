@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏开始！</title>
+    <title>Haha哈哈！</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -24,17 +24,40 @@
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        p {
-            line-height: 1.6;
+        button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
         }
     </style>
+    <script>
+        function changeContent() {
+            const contentDiv = document.getElementById('gameContent');
+            contentDiv.innerHTML = `
+                <h1>Heading!</h1>
+                <h2>Title</h2>
+                <p>title</p>
+                <p>Content. Testing 1 2 3.</p>
+            `;
+        }
+    </script>
 </head>
 <body>
-    <div class="content">
-        <h1>游戏开始！</h1>
-        <h2>获胜条件</h2>
-        <p>提前胜出</p>
-        <p>围绕整个棋盘移动棋子，到达尽可能多的古迹，收集各个古迹的纪念币碎片。最先集齐的玩家即可提前赢得胜利！</p>
+    <button onclick="changeContent()">Eng</button>
+    <div class="content" id="gameContent">
+        <h1>大標題！</h1>
+        <h2>中標題</h2>
+        <p>小標題</p>
+        <p>內容文本，以上純粹用於測試格式</p>
     </div>
 </body>
 </html>
