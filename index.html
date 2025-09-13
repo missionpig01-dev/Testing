@@ -3,38 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Haha哈哈！</title>
+    <title>游戏页面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             color: #333;
             margin: 0;
-            padding: 20px;
+            display: flex;
+            position: relative;
         }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
+        .sidebar {
+            width: 200px;
+            background: #3498db;
+            padding: 20px;
+            color: white;
+            position: absolute;
+            left: -220px; /* Initially hidden */
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+        }
+        .sidebar a:hover {
+            text-decoration: underline;
         }
         .content {
+            flex: 1;
             max-width: 600px;
             margin: auto;
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
-        button {
+        .lang-dropdown {
             position: absolute;
             top: 20px;
             right: 20px;
-            padding: 10px 15px;
             background-color: #3498db;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            padding: 10px 15px;
+            z-index: 1001;
         }
+        .lang-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .lang-menu button {
+            background: white;
+            color: #3498db;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .lang-menu button:hover {
+            background-color: #f0f0f0;
+        }
+        .toggle-sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 15px;
+            z-index: 1001;
+        }
+    </style>
+    <script>
+        let currentPage = 'home';
+        let currentLanguage = '繁體中文';
+
+        const contentData = {
+            home: {
+                '繁體中文': '<h1>大標題！</h1><h2>中標題</h2><p>內容文本，以上純粹用於測試格式</p>',
+                '简体中文': '<h1>大标题！</h1><h2>中标题</h2><p>内容文本，仅用于测试格式</p>',
+                'English': '<h1>Main Title!</h1><h2>Sub Title</h2><p>Content text, used only for formatting tests.</p>',
+            },
+            settings: {
+                '繁體中文': '<h1>背景設定</h1><p>這裡是背景設定的內容。</p>',
+                '简体中文': '<h1>背景设置</h1><p>这里是背景设置的内容。</p>',
+                'English': '<h1>Background Settings</h1><p>This is the content for background settings.</p>',
+            },
+            board: {
+                '繁體中文': '<h1>棋盤介紹</h1><p>這裡是棋盤介紹的內容。</p>',
+                '简体中文': '<h1>棋盘介绍</h1><p>这里是棋盘介绍的内容。</p>',
+                'English': '<h1>Board Introduction</h1><p>This is the content for board introduction.</p>',
+            },
+            accessories: {
+                '繁體中文': '<h1>遊戲配件</h1><p>任務卡，事件卡，地契卡，角色卡，物品卡，棋，錢，棋盤。</p>',
+                '简体中文': '<h1>游戏配件</h1><p>任务卡，事件卡，地契卡，角色卡，物品卡，棋，钱，棋盘。</p>',
+                'English': '<h1>Game Accessories</h1><p>Mission Cards, Event Cards, Deed Cards, Character Cards, Item Cards, Chess, Money, Board.</p>',
+            },
+            rules: {
+                '繁體中文': `
+                    <h1>遊戲規則</h1>
+                    <p>遊戲準備！</p>
+                    <p>每名玩家獲分配角色卡x1 對應角色的棋子x1 錢幣？地契卡x1</p>
+                    <p>遊戲開始！</p>
+                    <p>獲勝條件：</p>
+                    <p>提前勝出：圍繞整個棋盤移動棋子，到達盡可能多的古蹟，收集各個古蹟的紀念幣碎片。最先集齊的玩家即可提前贏得勝利！</p>
+                    <p>最終的勝利：圍繞整個棋盤移動棋子，購買盡可能多的古蹟代理權。擁有的古蹟代理權越多，您從其他玩家獲得的門票費用就越多。如果您在其他所有玩家都破產或沒有任何古蹟代理權時仍有資金和古蹟代理權，即代表贏得最終的勝利！</p>
+                    <p>由誰開局？每名玩家擲出骰子，點數最高者先行，接著是左手邊的玩家。</p>
+                    <p>你的回合：</p>
+                    <ol>
+                        <li>投擲骰子。</li>
+                        <li>按所擲出的點數移動棋子。</li>
+                        <li>根據到達的方格，執行相應的規則。具體請查看。。。的具體說明。</li>
+                        <li>你的回合已結束，請將骰子交給下一名玩家。</li>
+                    </ol>
+                `,
+                '简体中文': `
+                    <h1>游戏规则</h1>
+                    <p>游戏准备！</p>
+                    <p>每名玩家获得角色卡x1 对应角色的棋子x1 钱币？地契卡x1</p>
+                    <p>游戏开始！</p>
+                    <p>获胜条件：</p>
+                    <p>提前胜出：围绕整个棋盘移动棋子，到达尽可能多的古迹，收集各个古迹的纪念币碎片。最先集齐的玩家即可提前赢得胜利！</p>
+                    <p>最终的胜利：围绕整个棋盘移动棋子，购买尽可能多的古迹代理权。拥有的古迹代理权越多，您从其他玩家获得的门票费用就越多。如果您在其他所有玩家都破产或没有任何古迹代理权时仍有资金和古迹代理权，即代表赢得最终的胜利！</p>
+                    <p>由谁开局？每名玩家掷出骰子，点数最高者先行，接着是左手边的玩家。</p>
+                    <p>你的回合：</p>
+                    <ol>
+                        <li>投掷骰子。</li>
+                        <li>按所掷出的点数移动棋子。</li>
+                        <li>根据到达的方格，执行相应的规则。具体请查看。。。的具体说明。</li>
+                        <li>你的回合已结束，请将骰子交给下一名玩家。</li>
+                    </ol>
+                `,
+                'English': '<h1>Game Rules</h1><p>Game Setup!</p><p>Each player is assigned 1 character card, 1 corresponding pawn, some money, and 1 deed card.</p><p>Game Start!</p><p>Winning Conditions:</p><p>Early Win: Move your pawn around the board, reaching as many landmarks as possible to collect fragments of commemorative coins. The first player to collect all fragments wins!</p><p>Final Victory: Move your pawn around the board, purchasing as many landmark franchises as possible. The more franchises you own, the more ticket fees you collect from other players. If you still have money and franchises when all other players are bankrupt or have no franchises, you win!</p><p>Who Goes First? Each player rolls the dice, and the highest score goes first, followed by the player to their left.</p><p>Your Turn:</p><ol><li>Roll the dice.</li><li>Move your pawn according to the rolled number.</li><li>Execute the corresponding rules based on the square you land on. Please refer to the detailed description.</li><li>Your turn is over, pass the dice to the next player.</li></ol>',
+            },
+            strategy: {
+                '繁體中文': '<h1>遊戲策略</h1><p>這裡是遊戲策略的內容。</p>',
+                '简体中文': '<h1>游戏策略</h1><p>这里是游戏策略的内容。</p>',
+                'English': '<h1>Game Strategies</h1><p>This is the content for game strategies.</p>',
+            },
+            mascot: {
+                '繁體中文': '<h1>吉祥物</h1><p>這裡是吉祥物的內容。</p><img src="https://www.google.com/search?gs_ssp=eJzj4tDP1TcwNS_IMGD0YsvNTM5OrQQALjYFVQ&q=mickey&oq=mickey&gs_lcrp=EgZjaHJvbWUqDAgBEC4YQxiABBiKBTIPCAAQABhDGOMCGIAEGIoFMgwIARAuGEMYgAQYigUyBwgCEC4YgAQyBwgDEC4YgAQyDAgEEC4YQxiABBiKBTIHCAUQLhiABDIHCAYQLhiABDIHCAcQABiABDIHCAgQLhiABDIQCAkQLhivARjHARi6AhiABDIHCAoQABiABDIHCAsQABiABDIHCAwQABiABDIHCA0QABiABDIHCA4QLhiABNIBBzgyNWowajeoAg-wAgHxBVSKEgrETJhL8QVUihIKxEyYSw&client=ms-android-samsung-ss&sourceid=chrome-mobile&ie=UTF-8#vhid=oLIluhby-K5qVM&vssid=_Ik3EaIfyK7i1vr0PyLHAgAI_56&ebo=0" alt="吉祥物" />',
+                '简体中文': '<h1>吉祥物</h1><p>这里是吉祥物的内容。</p><img src="https://www.google.com/search?gs_ssp=eJzj4tDP1TcwNS_IMGD0YsvNTM5OrQQALjYFVQ&q=mickey&oq=mickey&gs_lcrp=EgZjaHJvbWUqDAgBEC4YQxiABBiKBTIPCAAQABhDGOMCGIAEGIoFMgwIARAuGEMYgAQYigUyBwgCEC4YgAQyBwgDEC4YgAQyDAgEEC4YQxiABBiKBTIHCAUQLhiABDIHCAYQLhiABDIHCAcQABiABDIHCAgQLhiABDIQCAkQLhivARjHARi6AhiABDIHCAoQABiABDIHCAsQABiABDIHCAwQABiABDIHCA0QABiABDIHCA4QLhiABNIBBzgyNWowajeoAg-wAgHxBVSKEgrETJhL8QVUihIKxEyYSw&client=ms-android-samsung-ss&sourceid=chrome-mobile&ie=UTF-8#vhid=oLIluhby-K5qVM&vssid=_Ik3EaIfyK7i1vr0PyLHAgAI_56&ebo=0" alt="吉祥物" />',
+                'English': '<h1>Mascot</h1><p>This is the content for the mascot.</p><img src="https://www.google.com/search?gs_ssp=eJzj4tDP1TcwNS_IMGD0YsvNTM5OrQQALjYFVQ&q=mickey&oq=mickey&gs_lcrp=EgZjaHJvbWUqDAgBEC4YQxiABBiKBTIPCAAQABhDGOMCGIAEGIoFMgwIARAuGEMYgAQYigUyBwgCEC4YgAQyBwgDEC4YgAQyDAgEEC4YQxiABBiKBTIHCAUQLhiABDIHCAYQLhiABDIHCAcQABiABDIHCAgQLhiABDIQCAkQLhivARjHARi6AhiABDIHCAoQABiABDIHCAsQABiABDIHCAwQABiABDIHCA0QABiABDIHCA4QLhiABNIBBzgyNWowajeoAg-wAgHxBVSKEgrETJhL8QVUihIKxEyYSw&client=ms-android-samsung-ss&sourceid=chrome-mobile&ie=UTF-8#vhid=oLIluhby-K5qVM&vssid=_Ik3EaIfyK7i1vr0PyLHAgAI_56&ebo=0" alt="Mascot" />',
+            },
+        };
+
+        function changePage(page) {
+            currentPage = page;
+            updateContent();
+            closeSidebar();
+        }
+
+        function changeLanguage(language) {
+            currentLanguage = language;
+            updateContent();
+            closeDropdown();
+        }
+
+        function updateContent() {
+            const contentDiv = document.getElementById('gameContent');
+            contentDiv.innerHTML = contentData[currentPage][currentLanguage] || '<p>内容未找到。</p>';
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.querySelector('.toggle-sidebar');
+
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-220px';
+                menuButton.style.display = 'block'; // Show menu button
+            } else {
+                sidebar.style.left = '0px';
+                menuButton.style.display = 'none'; // Hide menu button
+            }
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.style.display = 'none';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = '-220px';
+            document.querySelector('.toggle-sidebar').style.display = 'block'; // Show menu button
+        }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.querySelector('.toggle-sidebar');
+            const isClickInside = sidebar.contains(event.target) || menuButton.contains(event.target);
+            if (!isClickInside) {
+                closeSidebar();
+            }
+        });
+
+        window.onload = updateContent;
+    </script>
+</head>
+<body>
+    <button class="toggle-sidebar" onclick="toggleSidebar()">菜单</button>
+    <div class="sidebar" id="sidebar">
+        <h2>导航</h2>
+        <a href="#" onclick="changePage('home')">首页</a>
+        <a href="#" onclick="changePage('settings')">背景設定</a>
+        <a href="#" onclick="changePage('board')">棋盤介紹</a>
+        <a href="#" onclick="changePage('accessories')">遊戲配件</a>
+        <a href="#" onclick="changePage('rules')">遊戲規則</a>
+        <a href="#" onclick="changePage('strategy')">遊戲策略</a>
+        <a href="#" onclick="changePage('mascot')">吉祥物</a>
+    </div>
+    <div class="content" id="gameContent">
+        <!-- 内容会在这里更新 -->
+    </div>
+    <button class="lang-dropdown" onclick="toggleDropdown()">选择语言</button>
+    <div class="lang-menu" id="langDropdown">
+        <button onclick="changeLanguage('繁體中文')">繁體中文</button>
+        <button onclick="changeLanguage('简体中文')">简体中文</button>
+        <button onclick="changeLanguage('English')">English</button>
+    </div>
+</body>
+</html>        }
         button:hover {
             background-color: #2980b9;
         }
