@@ -110,6 +110,165 @@
                 'English': '<h1>Board Introduction</h1><p>This is the content for board introduction.</p>',
             },
             accessories: {
+                '繁體中文': '<h1>遊戲配件</h1><p>這裡是遊戲配件的內容。</p>',
+                '简体中文': '<h1>游戏配件</h1><p>这里是游戏配件的内容。</p>',
+                'English': '<h1>Game Accessories</h1><p>This is the content for game accessories.</p>',
+            },
+            rules: {
+                '繁體中文': '<h1>遊戲規則</h1><p>這裡是遊戲規則的內容。</p>',
+                '简体中文': '<h1>游戏规则</h1><p>这里是游戏规则的内容。</p>',
+                'English': '<h1>Game Rules</h1><p>This is the content for game rules.</p>',
+            },
+            strategy: {
+                '繁體中文': '<h1>遊戲策略</h1><p>這裡是遊戲策略的內容。</p>',
+                '简体中文': '<h1>游戏策略</h1><p>这里是游戏策略的内容。</p>',
+                'English': '<h1>Game Strategies</h1><p>This is the content for game strategies.</p>',
+            },
+            mascot: {
+                '繁體中文': '<h1>吉祥物</h1><p>這裡是吉祥物的內容。</p>',
+                '简体中文': '<h1>吉祥物</h1><p>这里是吉祥物的内容。</p>',
+                'English': '<h1>Mascot</h1><p>This is the content for the mascot.</p>',
+            },
+        };
+
+        function changePage(page) {
+            currentPage = page;
+            updateContent();
+            closeSidebar();
+        }
+
+        function changeLanguage(language) {
+            currentLanguage = language;
+            updateContent();
+            closeDropdown();
+        }
+
+        function updateContent() {
+            const contentDiv = document.getElementById('gameContent');
+            contentDiv.innerHTML = contentData[currentPage][currentLanguage];
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = sidebar.style.left === '0px' ? '-220px' : '0px';
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.style.display = 'none';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = '-220px';
+        }
+
+        window.onload = updateContent;
+    </script>
+</head>
+<body>
+    <button class="toggle-sidebar" onclick="toggleSidebar()">菜单</button>
+    <div class="sidebar" id="sidebar">
+        <h2>导航</h2>
+        <a href="#" onclick="changePage('home')">首页</a>
+        <a href="#" onclick="changePage('settings')">背景設定</a>
+        <a href="#" onclick="changePage('board')">棋盤介紹</a>
+        <a href="#" onclick="changePage('accessories')">遊戲配件</a>
+        <a href="#" onclick="changePage('rules')">遊戲規則</a>
+        <a href="#" onclick="changePage('strategy')">遊戲策略</a>
+        <a href="#" onclick="changePage('mascot')">吉祥物</a>
+    </div>
+    <div class="content" id="gameContent">
+        <!-- 内容会在这里更新 -->
+    </div>
+    <button class="lang-dropdown" onclick="toggleDropdown()">选择语言</button>
+    <div class="lang-menu" id="langDropdown">
+        <button onclick="changeLanguage('繁體中文')">繁體中文</button>
+        <button onclick="changeLanguage('简体中文')">简体中文</button>
+        <button onclick="changeLanguage('English')">English</button>
+    </div>
+</body>
+</html>            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .lang-dropdown {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 15px;
+            z-index: 1001;
+        }
+        .lang-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .lang-menu button {
+            background: white;
+            color: #3498db;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .lang-menu button:hover {
+            background-color: #f0f0f0;
+        }
+        .toggle-sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 15px;
+            z-index: 1001;
+        }
+    </style>
+    <script>
+        let currentPage = 'home';
+        let currentLanguage = '繁體中文';
+
+        const contentData = {
+            home: {
+                '繁體中文': '<h1>大標題！</h1><h2>中標題</h2><p>內容文本，以上純粹用於測試格式</p>',
+                '简体中文': '<h1>大标题！</h1><h2>中标题</h2><p>内容文本，仅用于测试格式</p>',
+                'English': '<h1>Main Title!</h1><h2>Sub Title</h2><p>Content text, used only for formatting tests.</p>',
+            },
+            settings: {
+                '繁體中文': '<h1>背景設定</h1><p>這裡是背景設定的內容。</p>',
+                '简体中文': '<h1>背景设置</h1><p>这里是背景设置的内容。</p>',
+                'English': '<h1>Background Settings</h1><p>This is the content for background settings.</p>',
+            },
+            board: {
+                '繁體中文': '<h1>棋盤介紹</h1><p>這裡是棋盤介紹的內容。</p>',
+                '简体中文': '<h1>棋盘介绍</h1><p>这里是棋盘介绍的内容。</p>',
+                'English': '<h1>Board Introduction</h1><p>This is the content for board introduction.</p>',
+            },
+            accessories: {
                 '繁體中文': '<h1>遊戲配件</h1><p>任務卡，事件卡，地契卡，角色卡，物品卡，棋，錢，棋盤。</p>',
                 '简体中文': '<h1>游戏配件</h1><p>任务卡，事件卡，地契卡，角色卡，物品卡，棋，钱，棋盘。</p>',
                 'English': '<h1>Game Accessories</h1><p>Mission Cards, Event Cards, Deed Cards, Character Cards, Item Cards, Chess, Money, Board.</p>',
