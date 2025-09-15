@@ -11,12 +11,17 @@
             color: #333;
             margin: 0;
             display: flex;
+            position: relative;
         }
         .sidebar {
             width: 200px;
             background: #3498db;
             padding: 20px;
             color: white;
+            position: absolute;
+            left: -220px; /* Initially hidden */
+            transition: left 0.3s ease;
+            z-index: 1000;
         }
         .sidebar a {
             color: white;
@@ -37,19 +42,51 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        button {
+        .lang-dropdown {
             position: absolute;
             top: 20px;
             right: 20px;
-            padding: 10px 15px;
             background-color: #3498db;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            padding: 10px 15px;
+            z-index: 1001;
         }
-        button:hover {
-            background-color: #2980b9;
+        .lang-menu {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .lang-menu button {
+            background: white;
+            color: #3498db;
+            border: none;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+        .lang-menu button:hover {
+            background-color: #f0f0f0;
+        }
+        .toggle-sidebar {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 10px 15px;
+            z-index: 1001;
         }
     </style>
     <script>
@@ -97,31 +134,46 @@
         function changePage(page) {
             currentPage = page;
             updateContent();
+            closeSidebar();
         }
 
-        function changeLanguage() {
-            if (currentLanguage === '繁體中文') {
-                currentLanguage = '简体中文';
-            } else if (currentLanguage === '简体中文') {
-                currentLanguage = 'English';
-            } else {
-                currentLanguage = '繁體中文';
-            }
+        function changeLanguage(language) {
+            currentLanguage = language;
             updateContent();
+            closeDropdown();
         }
 
         function updateContent() {
             const contentDiv = document.getElementById('gameContent');
             contentDiv.innerHTML = contentData[currentPage][currentLanguage];
-            const button = document.getElementById('langButton');
-            button.innerText = currentLanguage;
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = sidebar.style.left === '0px' ? '-220px' : '0px';
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('langDropdown');
+            dropdown.style.display = 'none';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.style.left = '-220px';
         }
 
         window.onload = updateContent;
     </script>
 </head>
 <body>
-    <div class="sidebar">
+    <button class="toggle-sidebar" onclick="toggleSidebar()">菜单</button>
+    <div class="sidebar" id="sidebar">
         <h2>导航</h2>
         <a href="#" onclick="changePage('home')">首页</a>
         <a href="#" onclick="changePage('settings')">背景設定</a>
@@ -134,6 +186,11 @@
     <div class="content" id="gameContent">
         <!-- 内容会在这里更新 -->
     </div>
-    <button id="langButton" onclick="changeLanguage()">繁體中文</button>
+    <button class="lang-dropdown" onclick="toggleDropdown()">选择语言</button>
+    <div class="lang-menu" id="langDropdown">
+        <button onclick="changeLanguage('繁體中文')">繁體中文</button>
+        <button onclick="changeLanguage('简体中文')">简体中文</button>
+        <button onclick="changeLanguage('English')">English</button>
+    </div>
 </body>
 </html>
