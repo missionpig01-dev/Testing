@@ -150,7 +150,15 @@
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
-            sidebar.style.left = sidebar.style.left === '0px' ? '-220px' : '0px';
+            const menuButton = document.querySelector('.toggle-sidebar');
+
+            if (sidebar.style.left === '0px') {
+                sidebar.style.left = '-220px'; // Hide sidebar
+                menuButton.style.display = 'block'; // Show menu button
+            } else {
+                sidebar.style.left = '0px'; // Show sidebar
+                menuButton.style.display = 'none'; // Hide menu button
+            }
         }
 
         function toggleDropdown() {
@@ -166,7 +174,18 @@
         function closeSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.style.left = '-220px';
+            document.querySelector('.toggle-sidebar').style.display = 'block'; // Show menu button
         }
+
+        // Close sidebar when clicking outside
+        document.addEventListener('click', function(event) {
+            const sidebar = document.getElementById('sidebar');
+            const menuButton = document.querySelector('.toggle-sidebar');
+            const isClickInside = sidebar.contains(event.target) || menuButton.contains(event.target);
+            if (!isClickInside) {
+                closeSidebar();
+            }
+        });
 
         window.onload = updateContent;
     </script>
